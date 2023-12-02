@@ -14,10 +14,10 @@
 </table>
 
 ## List
-1. [System Architecture](https://github.com/Dyoya/EmbeddedProject#System%20Architecture)
-2. [RasberryPi](https://github.com/Dyoya/EmbeddedProject#RasberryPi)
-3. [Server](https://github.com/Dyoya/EmbeddedProject#Server)
-4. [Android App](https://github.com/Dyoya/EmbeddedProject#Android%20App)
+1. [System Architecture](https://github.com/Dyoya/EmbeddedProject#1-system-architecture)
+2. [RasberryPi](https://github.com/Dyoya/EmbeddedProject#2-rasberrypi)
+3. [Server](https://github.com/Dyoya/EmbeddedProject#3-server)
+4. [Android App](https://github.com/Dyoya/EmbeddedProject#4-android-app)
 
 ## 1. System Architecture
 
