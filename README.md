@@ -1,4 +1,4 @@
-![header](https://capsule-render.vercel.app/api?type=rect&color=auto&height=400&section=header&text=자동차%20상태%20감지&fontSize=60&animation=twinkling&desc=임베디드시스템%204조%20기말%20프로젝트)
+![header](https://capsule-render.vercel.app/api?type=rect&color=auto&height=400&section=header&text=간이%20자동차%20프로젝트&fontSize=60&animation=twinkling&desc=임베디드시스템%204조%20기말%20프로젝트)
 <br/>
 
 ### Contributors
@@ -18,7 +18,7 @@
 2. [RasberryPi](https://github.com/Dyoya/EmbeddedProject#2-rasberrypi)
 3. [Server](https://github.com/Dyoya/EmbeddedProject#3-server)
 4. [Android App](https://github.com/Dyoya/EmbeddedProject#4-android-app)
-5. [참고문헌](https://github.com/Dyoya/EmbeddedProject#5-참고-문헌)
+5. [참고문헌](https://github.com/Dyoya/EmbeddedProject#5-참고문헌)
 
 ## 1. System Architecture
 
