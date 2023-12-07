@@ -6,9 +6,9 @@
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Dyoya/"><img src="https://avatars.githubusercontent.com/u/118094189?v=4" width="100px;" alt="Dyoya"/><br /><sub><b>Dyoya (김형민, 20190348)</b></sub></a><br /> <a href="https://github.com/Dyoya/EmbeddedProject/commits?author=Dyoya" title="Commit Log">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Dyoya/"><img src="https://avatars.githubusercontent.com/u/113571828?v=4" width="100px;" alt="ParkSGye"/><br /><sub><b>ParkSGye (박성규, 20190452)</b></sub></a><br /> <a href="https://github.com/Dyoya/EmbeddedProject/commits?author=ParkSGye" title="Commit Log">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Dyoya/"><img src="https://avatars.githubusercontent.com/u/93814905?v=4" width="100px;" alt="user71309876"/><br /><sub><b>user71309876 (박재현, 20180474)</b></sub></a><br /> <a href="https://github.com/Dyoya/EmbeddedProject/commits?author=user71309876" title="Commit Log">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Dyoya/"><img src="https://avatars.githubusercontent.com/u/67849875?v=4" width="100px;" alt="Jihoon"/><br /><sub><b>Jihoon (안지훈, 20190685)</b></sub></a><br /> <a href="https://github.com/Dyoya/EmbeddedProject/commits?author=Jihoon" title="Commit Log">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ParkSGye/"><img src="https://avatars.githubusercontent.com/u/113571828?v=4" width="100px;" alt="ParkSGye"/><br /><sub><b>ParkSGye (박성규, 20190452)</b></sub></a><br /> <a href="https://github.com/Dyoya/EmbeddedProject/commits?author=ParkSGye" title="Commit Log">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/user71309876/"><img src="https://avatars.githubusercontent.com/u/93814905?v=4" width="100px;" alt="user71309876"/><br /><sub><b>user71309876 (박재현, 20180474)</b></sub></a><br /> <a href="https://github.com/Dyoya/EmbeddedProject/commits?author=user71309876" title="Commit Log">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Jihoon/"><img src="https://avatars.githubusercontent.com/u/67849875?v=4" width="100px;" alt="Jihoon"/><br /><sub><b>Jihoon (안지훈, 20190685)</b></sub></a><br /> <a href="https://github.com/Dyoya/EmbeddedProject/commits?author=Jihoon" title="Commit Log">💻</a></td>
     </tr>
   </tbody>
 </table>
