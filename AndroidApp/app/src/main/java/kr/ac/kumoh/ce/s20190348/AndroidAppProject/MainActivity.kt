@@ -63,6 +63,11 @@ fun MainScreen() {
 @Composable
 fun SensorList()
 {
+    var danger = Color(255, 0, 0, 100)
+    var red = Color(255, 0, 0, 50)
+    var yellow = Color(255, 255, 0, 50)
+    var green = Color(0, 255, 0, 50)
+
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -72,7 +77,7 @@ fun SensorList()
             modifier = Modifier
                 .fillMaxHeight()
                 .weight(1f)
-                .background(Color(0xffffffcc))
+                .background(red)
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -102,7 +107,7 @@ fun SensorList()
             modifier = Modifier
                 .fillMaxHeight()
                 .weight(1f)
-                .background(Color(0xffffffcc))
+                .background(yellow)
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -132,7 +137,7 @@ fun SensorList()
             modifier = Modifier
                 .fillMaxHeight()
                 .weight(1f)
-                .background(Color(0xffffffcc))
+                .background(green)
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -162,7 +167,7 @@ fun SensorList()
             modifier = Modifier
                 .fillMaxHeight()
                 .weight(1f)
-                .background(Color(0xffffffcc))
+                .background(danger)
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ){
