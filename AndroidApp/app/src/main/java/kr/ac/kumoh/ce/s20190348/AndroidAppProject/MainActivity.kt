@@ -201,7 +201,22 @@ fun TitleText(title: String)
 }
 
 @Composable
-fun DataText(data: String)
-{
+fun DataText(data: String) {
     Text(data, fontSize = 16.sp)
+}
+
+@Composable
+fun dangerColor(sensor: Sensor)
+{
+    val colorList = mutableListOf<String>()
+
+    if (sensor.temperature < 5 || sensor.temperature > 40)
+        colorList[0] = "yellow"
+    else if(sensor.temperature < 0 || sensor.temperature > 60)
+        colorList[0] = "red"
+    else if(sensor.temperature < -5 || sensor.temperature > 70)
+        colorList[0] = "danger"
+    else
+        colorList[0] = "green"
+
 }
