@@ -7,13 +7,10 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -44,29 +41,26 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainScreen()
+            MainScreen(viewModel)
         }
     }
 }
 
 @Composable
-fun MainScreen() {
-    //val sensorList by viewModel.sensorList.observeAsState(emptyList())
+fun MainScreen(viewModel: SensorViewModel) {
+    val sensorList by viewModel.sensorList.observeAsState(emptyList())
 
     AndroidAppTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-            SensorList()
+            SensorList(sensorList)
         }
     }
 }
 
 @Composable
-fun SensorList()
+fun SensorList(sensor: List<Sensor>)
 {
-    var danger = Color(255, 0, 0, 100)
-    var red = Color(255, 0, 0, 50)
-    var yellow = Color(255, 255, 0, 50)
-    var green = Color(0, 255, 0, 50)
+    var colorList = dangerColor(sensor[0]) // 임시
 
     Column (
         modifier = Modifier
@@ -77,7 +71,7 @@ fun SensorList()
             modifier = Modifier
                 .fillMaxHeight()
                 .weight(1f)
-                .background(red)
+                .background(colorList[0])
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -107,7 +101,7 @@ fun SensorList()
             modifier = Modifier
                 .fillMaxHeight()
                 .weight(1f)
-                .background(yellow)
+                .background(colorList[1])
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -137,7 +131,7 @@ fun SensorList()
             modifier = Modifier
                 .fillMaxHeight()
                 .weight(1f)
-                .background(green)
+                .background(colorList[2])
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -167,7 +161,7 @@ fun SensorList()
             modifier = Modifier
                 .fillMaxHeight()
                 .weight(1f)
-                .background(danger)
+                .background(colorList[3])
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -206,17 +200,46 @@ fun DataText(data: String) {
 }
 
 @Composable
-fun dangerColor(sensor: Sensor)
-{
-    val colorList = mutableListOf<String>()
+fun dangerColor(sensor: Sensor): MutableList<Color> {
+    var danger = Color(255, 0, 0, 100)
+    var red = Color(255, 0, 0, 50)
+    var yellow = Color(255, 255, 0, 50)
+    var green = Color(0, 255, 0, 50)
 
-    if (sensor.temperature < 5 || sensor.temperature > 40)
-        colorList[0] = "yellow"
+    val colorList = mutableListOf<Color>()
+
+    // 온도 센서
+    if(sensor.temperature < -5 || sensor.temperature > 70)
+        colorList[0] = danger
     else if(sensor.temperature < 0 || sensor.temperature > 60)
-        colorList[0] = "red"
-    else if(sensor.temperature < -5 || sensor.temperature > 70)
-        colorList[0] = "danger"
+        colorList[0] = red
+    else if (sensor.temperature < 5 || sensor.temperature > 40)
+        colorList[0] = yellow
     else
-        colorList[0] = "green"
+        colorList[0] = green
 
+    // 수위 센서
+    if(sensor.water > 700)
+        colorList[1] = danger
+    else if(sensor.water > 500)
+        colorList[1] = red
+    else if (sensor.water > 300)
+        colorList[1] = yellow
+    else
+        colorList[1] = green
+
+    // 가스 센서
+    if(sensor.temperature > 50)
+        colorList[2] = danger
+    else if(sensor.temperature > 30)
+        colorList[2] = red
+    else if (sensor.temperature > 10)
+        colorList[2] = yellow
+    else
+        colorList[2] = green
+
+    // NFC
+
+
+    return colorList
 }
