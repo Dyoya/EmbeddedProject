@@ -21,6 +21,14 @@ int main()
 
     // 초기화
     share_var = 0;
+    if(wiringPiSetupGpio() < 0 ){
+        printf("wiringPiSetup() is failed\n");
+        return NULL;
+    }
+    if ((i2c_fd = wiringPiI2CSetupInterface (i2c_dev, adc_slave_addr)) < 0 ){
+        printf("wiringPi2CSetup Failed: \n"); 
+        return NULL;
+    }
 
 
     //테스트
