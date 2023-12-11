@@ -1,6 +1,9 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <wiringPi.h>
+#include <wiringPiI2C.h>
+#include <pthread.h>
 #include "common.h"
 
 /*
@@ -23,11 +26,11 @@ int main()
     share_var = 0;
     if(wiringPiSetupGpio() < 0 ){
         printf("wiringPiSetup() is failed\n");
-        return NULL;
+        return -1;
     }
     if ((i2c_fd = wiringPiI2CSetupInterface (i2c_dev, adc_slave_addr)) < 0 ){
         printf("wiringPi2CSetup Failed: \n"); 
-        return NULL;
+        return -1;
     }
 
 

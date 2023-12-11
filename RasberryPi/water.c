@@ -15,21 +15,6 @@ void *waterSensorFun(void *arg)
     int curVal = 0; // 현재 값
     int adcChannel = 2; // 채널 번호
 
-    // wiringPi 셋업 ===== main으로 옮김
-    /*
-    if(wiringPiSetupGpio() < 0 ){
-        printf("wiringPiSetup() is failed\n");
-        return NULL;
-    }
-
-    // i2C 연결
-    if ((i2c_fd = wiringPiI2CSetupInterface (I2C_DEV, SLAVE_ADDR_01)) < 0 ){
-        printf("wiringPi2CSetup Failed: \n"); 
-        return NULL;
-    }
-    printf("I2C start....\n");
-    */
-
     while(1){ 
         // share_var이 2가 될 때까지 대기
         while(share_var != 2) {}
