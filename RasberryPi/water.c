@@ -10,7 +10,7 @@ static const char* I2C_DEV = "/dev/i2c-1"; // 장치 파일
 
 void *waterSensorFun(void *arg)
 {
-    int i2c_fd;  
+    //int i2c_fd;  main에서 초기화하고 전역변수 처리함
     int preVal = 0; // 이전 값
     int curVal = 0; // 현재 값
     int adcChannel = 2; // 채널 번호
