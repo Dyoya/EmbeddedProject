@@ -9,6 +9,7 @@ extern int share_var;
 extern pthread_mutex_t mutex;
 extern unsigned int adc_slave_addr;
 extern const char* i2c_dev;
+extern int i2c_fd;
 extern unsigned int gas_data;
 
 
