@@ -5,6 +5,9 @@
 #include <pthread.h>
 #include "common.h"
 
+extern const char* i2c_dev;
+
+
 void *gasSensorFun(void *arg)
 {
     const int adc_channel = 3;
