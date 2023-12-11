@@ -9,7 +9,6 @@
 void *gasSensorFun(void *arg)
 {
     const int adc_channel = 3;
-    int gas_data = 0;
     int fd = i2c_dev;
     while(1){ 
         // share_var이 1가 될 때까지 대기
