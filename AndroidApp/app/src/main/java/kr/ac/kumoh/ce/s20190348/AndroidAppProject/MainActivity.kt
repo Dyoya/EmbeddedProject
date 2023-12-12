@@ -1,6 +1,14 @@
 package kr.ac.kumoh.ce.s20190348.AndroidAppProject
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.support.v4.app.NotificationCompat
+import android.support.v4.app.NotificationManagerCompat
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -15,9 +23,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -25,23 +30,76 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.HorizontalAlignmentLine
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.postDelayed
 import coil.compose.AsyncImage
 import kr.ac.kumoh.ce.s20190348.AndroidAppProject.ui.theme.AndroidAppTheme
 
+
 class MainActivity : ComponentActivity() {
     private val viewModel: SensorViewModel by viewModels()
+
+    private val handler = Handler(Looper.getMainLooper())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        createNotificationChannel()
+
         setContent {
             MainScreen(viewModel)
+        }
+
+        // 2초마다 데이터 가져와서 업데이트
+        handler.postDelayed(2000) {
+            viewModel.fetchData()
+            checkSensorStatus(viewModel.sensorList.value)
+        }
+    }
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "SensorNotificationChannel"
+            val descriptionText = "Channel for sensor notifications"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel("sensor_channel", name, importance).apply {
+                description = descriptionText
+            }
+
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun checkSensorStatus(sensorList: List<Sensor>?) {
+        sensorList?.let {
+            val colorList = dangerColor(sensorList[0])
+
+            // Check for red color indicating danger
+            if (colorList.contains(Color(255, 0, 0, 100))) {
+                sendNotification("Danger", "차량에 위험 신호가 발견됨!")
+            }
+        }
+    }
+    private fun sendNotification(title: String, message: String) {
+        val builder = NotificationCompat.Builder(this, "sensor_channel")
+            .setSmallIcon(androidx.core.R.drawable.notification_bg)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        with(NotificationManagerCompat.from(this)) {
+            notify(1, builder.build())
         }
     }
 }
@@ -52,15 +110,20 @@ fun MainScreen(viewModel: SensorViewModel) {
 
     AndroidAppTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-            SensorList(sensorList)
+            DisplaySensor(sensorList)
         }
     }
 }
 
 @Composable
-fun SensorList(sensor: List<Sensor>)
+fun DisplaySensor(sensor: List<Sensor>)
 {
     var colorList = dangerColor(sensor[0]) // 임시
+
+    val tem =  sensor[0].temperature
+    val water = sensor[0].water
+    val gas = sensor[0].gas
+    val nfc = sensor[0].nfc
 
     Column (
         modifier = Modifier
@@ -91,7 +154,7 @@ fun SensorList(sensor: List<Sensor>)
                 verticalArrangement = Arrangement.Center
             ){
                 TitleText("온도 센서")
-                DataText("10도")
+                DataText("${tem}")
             }
         }
 
@@ -121,7 +184,7 @@ fun SensorList(sensor: List<Sensor>)
                 verticalArrangement = Arrangement.Center
             ){
                 TitleText("수위 센서")
-                DataText("10mm")
+                DataText("${water}")
             }
         }
 
@@ -151,7 +214,7 @@ fun SensorList(sensor: List<Sensor>)
                 verticalArrangement = Arrangement.Center
             ){
                 TitleText("가스 센서")
-                DataText("10")
+                DataText("${gas}")
             }
         }
 
@@ -182,7 +245,7 @@ fun SensorList(sensor: List<Sensor>)
                 verticalArrangement = Arrangement.Center
             ){
                 TitleText("NFC")
-                DataText("---")
+                DataText("${nfc}")
             }
         }
     }
@@ -199,14 +262,14 @@ fun DataText(data: String) {
     Text(data, fontSize = 16.sp)
 }
 
-@Composable
 fun dangerColor(sensor: Sensor): MutableList<Color> {
-    var danger = Color(255, 0, 0, 100)
-    var red = Color(255, 0, 0, 50)
-    var yellow = Color(255, 255, 0, 50)
-    var green = Color(0, 255, 0, 50)
+    var danger = Color(255, 0, 0, 100) // 위험
+    var red = Color(255, 0, 0, 50) // 경고
+    var yellow = Color(255, 255, 0, 50) // 주의
+    var green = Color(0, 255, 0, 50) // 안전
 
     val colorList = mutableListOf<Color>()
+    colorList += Color(0, 0, 0, 0) // 초기화
 
     // 온도 센서
     if(sensor.temperature < -5 || sensor.temperature > 70)

@@ -52,6 +52,8 @@ dependencies {
 
     implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
 
+    implementation("com.android.support:support-compat:28.0.0")
+
     implementation("io.coil-kt:coil-compose:2.5.0")
 
     implementation("androidx.core:core-ktx:1.9.0")

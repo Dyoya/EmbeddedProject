@@ -5,5 +5,4 @@ data class Sensor(
     val water : Int,
     val gas : Int,
     val nfc : String,
-    val nfcTime : String
 )

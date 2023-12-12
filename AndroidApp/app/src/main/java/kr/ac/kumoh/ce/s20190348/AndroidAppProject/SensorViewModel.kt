@@ -1,6 +1,7 @@
 package kr.ac.kumoh.ce.s20190348.AndroidAppProject
 
 import android.util.Log
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,7 +26,7 @@ class SensorViewModel() : ViewModel() {
         sensorApi = retrofit.create(SensorApi::class.java)
         fetchData()
     }
-    private fun fetchData() {
+    fun fetchData() {
         viewModelScope.launch {
             try {
                 val response = sensorApi.getSensors()
