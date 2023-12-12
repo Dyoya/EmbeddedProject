@@ -8,5 +8,5 @@ curl -d '{"value":35, "time":11}' \
 
 이 명령어를 system()이라는 함수에 넣으시면 됩니다
 
--express.js 저장서
+-express.js 저장소
 https://github.com/user71309876/embedded-system/tree/main
