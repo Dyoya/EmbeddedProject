@@ -11,7 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class SensorViewModel() : ViewModel() {
-    private val SERVER_URL = "url"
+    private val SERVER_URL = "https://port-0-embedded-system-1gksli2alppq2t18.sel4.cloudtype.app/"
     private val sensorApi: SensorApi
     private val _sensorList = MutableLiveData<List<Sensor>>()
     val sensorList: LiveData<List<Sensor>>
