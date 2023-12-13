@@ -1,5 +1,6 @@
 package kr.ac.kumoh.ce.s20190348.AndroidAppProject
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -7,8 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationManagerCompat
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -41,6 +41,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.os.postDelayed
 import coil.compose.AsyncImage
 import kr.ac.kumoh.ce.s20190348.AndroidAppProject.ui.theme.AndroidAppTheme
@@ -54,16 +56,20 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // 임시 데이터
+        val randomSensorList = createRandomSensorList(1)
+
         createNotificationChannel()
 
         setContent {
-            MainScreen(viewModel)
+            MainScreen(randomSensorList)
         }
 
         // 2초마다 데이터 가져와서 업데이트
         handler.postDelayed(2000) {
             viewModel.fetchData()
             checkSensorStatus(viewModel.sensorList.value)
+            Log.d("MainActivity", "checkSensorStatus called after fetching data")
         }
     }
     private fun createNotificationChannel() {
@@ -91,22 +97,32 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-    private fun sendNotification(title: String, message: String) {
-        val builder = NotificationCompat.Builder(this, "sensor_channel")
-            .setSmallIcon(androidx.core.R.drawable.notification_bg)
-            .setContentTitle(title)
-            .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-        with(NotificationManagerCompat.from(this)) {
-            notify(1, builder.build())
+    private fun sendNotification(title: String, message: String) {
+        Log.d("MainActivity", "Sending notification - Title: $title, Message: $message")
+
+        // 알림 권한 확인
+        if (NotificationManagerCompat.from(this).areNotificationsEnabled()) {
+            val builder = NotificationCompat.Builder(this, "sensor_channel")
+                .setSmallIcon(androidx.core.R.drawable.notification_bg)
+                .setContentTitle(title)
+                .setContentText(message)
+
+            with(NotificationManagerCompat.from(this)) {
+                notify(1, builder.build())
+            }
+        } else {
+            // 알림이 활성화되어 있지 않은 경우 처리
+            Log.d("MainActivity", "알림이 활성화되어 있지 않습니다.")
         }
     }
+
 }
 
 @Composable
-fun MainScreen(viewModel: SensorViewModel) {
-    val sensorList by viewModel.sensorList.observeAsState(emptyList())
+//fun MainScreen(viewModel: SensorViewModel) {
+fun MainScreen(sensorList: List<Sensor>) {
+    //val sensorList by viewModel.sensorList.observeAsState(emptyList())
 
     AndroidAppTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
@@ -118,7 +134,7 @@ fun MainScreen(viewModel: SensorViewModel) {
 @Composable
 fun DisplaySensor(sensor: List<Sensor>)
 {
-    var colorList = dangerColor(sensor[0]) // 임시
+    val colorList = dangerColor(sensor[0]) // 임시
 
     val tem =  sensor[0].temperature
     val water = sensor[0].water
@@ -263,13 +279,16 @@ fun DataText(data: String) {
 }
 
 fun dangerColor(sensor: Sensor): MutableList<Color> {
-    var danger = Color(255, 0, 0, 100) // 위험
-    var red = Color(255, 0, 0, 50) // 경고
-    var yellow = Color(255, 255, 0, 50) // 주의
-    var green = Color(0, 255, 0, 50) // 안전
+    val danger = Color(255, 0, 0, 100) // 위험
+    val red = Color(255, 0, 0, 50) // 경고
+    val yellow = Color(255, 255, 0, 50) // 주의
+    val green = Color(0, 255, 0, 50) // 안전
 
-    val colorList = mutableListOf<Color>()
-    colorList += Color(0, 0, 0, 0) // 초기화
+    // 초기화
+    val colorList = mutableListOf<Color>().apply {
+        repeat(4) { add(Color(0, 0, 0, 0)) }
+    }
+
 
     // 온도 센서
     if(sensor.temperature < -5 || sensor.temperature > 70)
@@ -305,4 +324,21 @@ fun dangerColor(sensor: Sensor): MutableList<Color> {
 
 
     return colorList
+}
+
+fun createRandomSensorList(size: Int): List<Sensor> {
+    val random = java.util.Random()
+    val sensorList = mutableListOf<Sensor>()
+
+    repeat(size) {
+        val temperature = random.nextInt(100) // 임의의 온도 데이터 (0부터 99까지의 난수)
+        val water = random.nextInt(1000) // 임의의 수위 데이터 (0부터 999까지의 난수)
+        val gas = random.nextInt(100) // 임의의 가스 데이터 (0부터 99까지의 난수)
+        val nfc = "NFC_${random.nextInt(100)}" // 임의의 NFC 데이터 ("NFC_0"부터 "NFC_99"까지의 문자열)
+
+        val sensor = Sensor(temperature, water, gas, nfc)
+        sensorList.add(sensor)
+    }
+
+    return sensorList
 }
