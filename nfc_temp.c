@@ -131,7 +131,9 @@ int PN532_ReadPassiveTarget(uint8_t* response, uint8_t card_baud, uint32_t timeo
     return buff[5];
 }
 
-int main() {
+const char* NFC_Reader(){
+    char result[12];
+
     uint8_t uid[10];
     int32_t uid_len = 0;
     printf("Hello!\r\n");
@@ -144,10 +146,16 @@ int main() {
         if (uid_len != -1) {
             printf("Found card with UID: ");
             for (uint8_t i = 0; i < uid_len; i++) {
-                printf("%02x ", uid[i]);
+                fprintf(result,"%02x ", uid[i]);
             }
             printf("\r\n");
             break;
         }
     }
+
+    return result;
+}
+
+int main() {
+    printf("%s\n",NFC_Reader());
 }
