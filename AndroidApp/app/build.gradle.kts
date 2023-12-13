@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId = "kr.ac.kumoh.ce.s20190348.AndroidAppProject"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -52,13 +52,11 @@ dependencies {
 
     implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
 
-    implementation("com.android.support:support-compat:28.0.0")
-
     implementation("io.coil-kt:coil-compose:2.5.0")
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.0")
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.activity:activity-compose:1.8.1")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")

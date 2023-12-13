@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -68,7 +69,8 @@ class MainActivity : ComponentActivity() {
         // 2초마다 데이터 가져와서 업데이트
         handler.postDelayed(2000) {
             viewModel.fetchData()
-            checkSensorStatus(viewModel.sensorList.value)
+            //checkSensorStatus(viewModel.sensorList.value)
+            checkSensorStatus(randomSensorList)
             Log.d("MainActivity", "checkSensorStatus called after fetching data")
         }
     }
@@ -93,7 +95,7 @@ class MainActivity : ComponentActivity() {
 
             // Check for red color indicating danger
             if (colorList.contains(Color(255, 0, 0, 100))) {
-                sendNotification("Danger", "차량에 위험 신호가 발견됨!")
+                sendNotification("!!!차량 위험!!!", "차량에 위험 신호가 발견됨!")
             }
         }
     }
@@ -101,22 +103,21 @@ class MainActivity : ComponentActivity() {
     private fun sendNotification(title: String, message: String) {
         Log.d("MainActivity", "Sending notification - Title: $title, Message: $message")
 
-        // 알림 권한 확인
-        if (NotificationManagerCompat.from(this).areNotificationsEnabled()) {
+        try {
             val builder = NotificationCompat.Builder(this, "sensor_channel")
-                .setSmallIcon(androidx.core.R.drawable.notification_bg)
+                .setSmallIcon(android.R.drawable.ic_dialog_alert)
                 .setContentTitle(title)
                 .setContentText(message)
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setAutoCancel(true)
 
             with(NotificationManagerCompat.from(this)) {
                 notify(1, builder.build())
             }
-        } else {
-            // 알림이 활성화되어 있지 않은 경우 처리
-            Log.d("MainActivity", "알림이 활성화되어 있지 않습니다.")
+        } catch (e: SecurityException) {
+            Log.d("MainActivity", "알림 오류")
         }
     }
-
 }
 
 @Composable
