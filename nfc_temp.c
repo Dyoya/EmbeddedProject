@@ -11,6 +11,7 @@ int PN532_UART_ReadData(uint8_t* data, uint16_t count) {
     int length = count;
     while (index < 4) {
         if (serialDataAvail(fd)) {
+            printf("data[%d] : %02x\n",index,data[index]);
             data[index] = serialGetchar(fd);
             index++;
         } else {
@@ -20,9 +21,11 @@ int PN532_UART_ReadData(uint8_t* data, uint16_t count) {
     if (data[3] != 0) {
         length = data[3] + 7;
     }
+    // printf("length : %d\n",length);
     while (index < length) {
         if (serialDataAvail(fd)) {
             data[index] = serialGetchar(fd);
+            printf("data[%d] : %02x\n",index,data[index]);
             if (index == 3 && data[index] != 0) {
                 length = data[index] + 7;
             }
@@ -35,16 +38,15 @@ int PN532_UART_ReadData(uint8_t* data, uint16_t count) {
 }
 
 void PN532_UART_Init() {
-    fd = serialOpen("/dev/ttyS0", 115200);
-    wiringPiSetupGpio();
+    if (wiringPiSetup () < 0) return ;
+    if ((fd = serialOpen("/dev/ttyS0", 115200)) < 0) {
+        printf ("Unable to open serial device.\n") ;
+        return ;
+    }
 
-    pinMode(20, OUTPUT);
-    digitalWrite(20, HIGH);
-    delay(100);
-    digitalWrite(20, LOW);
-    delay(500);
-    digitalWrite(20, HIGH);
-    delay(100);
+    uint8_t data[] = {0x55, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x03, 0xFD, 0xD4, 0x14, 0x01, 0x17, 0x00};
+    write(fd, data, sizeof(data));
+    delay(50);
 } 
 
 /*
@@ -121,7 +123,6 @@ int PN532_CallFunction(
 }
 
 int PN532_ReadPassiveTarget(uint8_t* response, uint8_t card_baud, uint32_t timeout) {
-    // Send passive read command for 1 card.  Expect at most a 7 byte UUID.
     uint8_t params[] = {0x01, card_baud};
     uint8_t buff[19];
     PN532_CallFunction(0x4A,buff, sizeof(buff), params, sizeof(params));
@@ -131,9 +132,7 @@ int PN532_ReadPassiveTarget(uint8_t* response, uint8_t card_baud, uint32_t timeo
     return buff[5];
 }
 
-const char* NFC_Reader(){
-    char result[12];
-
+int main() {
     uint8_t uid[10];
     int32_t uid_len = 0;
     printf("Hello!\r\n");
@@ -146,16 +145,10 @@ const char* NFC_Reader(){
         if (uid_len != -1) {
             printf("Found card with UID: ");
             for (uint8_t i = 0; i < uid_len; i++) {
-                fprintf(result,"%02x ", uid[i]);
+                printf("%02x ", uid[i]);
             }
             printf("\r\n");
             break;
         }
     }
-
-    return result;
-}
-
-int main() {
-    printf("%s\n",NFC_Reader());
 }
