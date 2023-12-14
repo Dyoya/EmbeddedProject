@@ -39,7 +39,7 @@ int PN532_UART_ReadData(uint8_t* data, uint16_t count) {
     }
     return 0;
 }
-
+/*
 void PN532_UART_Init() {
     if (wiringPiSetup () < 0) return ;
     if ((fd = serialOpen("/dev/ttyS0", 115200)) < 0) {
@@ -51,6 +51,7 @@ void PN532_UART_Init() {
     write(fd, data, sizeof(data));
     delay(50);
 } 
+*/
 
 /*
 =================================================================================
@@ -139,7 +140,7 @@ char * NFC_Reader(){
     uint8_t static uid[10];
     int32_t uid_len = 0;
     static char response[4];
-    PN532_UART_Init(); 
+    //PN532_UART_Init(); 
     while(PN532_ReadPassiveTarget(uid, 0x00, 1000)==-1);
     sprintf(response,"%x %x %x %x\n",uid[0],uid[1],uid[2],uid[3]);
     return response;
