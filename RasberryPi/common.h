@@ -11,6 +11,7 @@ extern unsigned int adc_slave_addr;
 extern const char* i2c_dev;
 extern int i2c_fd;
 extern unsigned int gas_data;
+extern int uart_fd;
 
 
 extern void *temperatureSensorFun(void *); // 온습도 센서 쓰레드 함수
