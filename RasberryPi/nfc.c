@@ -135,13 +135,13 @@ int PN532_ReadPassiveTarget(uint8_t* response, uint8_t card_baud, uint32_t timeo
     return buff[5];
 }
 
-int NFC_Reader(){
+char * NFC_Reader(){
     uint8_t static uid[10];
     int32_t uid_len = 0;
-    int response;
+    static char response[4];
     PN532_UART_Init(); 
     while(PN532_ReadPassiveTarget(uid, 0x00, 1000)==-1);
-    fprintf(response,"%d%d%d%d",uid[0],uid[1],uid[2],uid[3]);
+    sprintf(response,"%x %x %x %x\n",uid[0],uid[1],uid[2],uid[3]);
     return response;
 }
 
@@ -160,7 +160,7 @@ void *NFCReaderFun(void *arg)
         // ============== TODO : 측정 데이터 읽어오기 ============== //
 
         
-        printf("nfc : %d\n", NFC_Reader());
+        printf("nfc : %s\n", NFC_Reader());
 
         pthread_mutex_unlock(&mutex); // 뮤텍스 잠금 해제
         sleep(2);
