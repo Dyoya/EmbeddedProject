@@ -8,13 +8,14 @@
 #include "common.h"
 
 int fd = 0;
+static char* nfcID = "null";
 
 int PN532_UART_ReadData(uint8_t* data, uint16_t count) {
     int index = 0;
     int length = count;
     while (index < 4) {
         if (serialDataAvail(fd)) {
-            printf("data[%d] : %02x\n",index,data[index]);
+            //printf("data[%d] : %02x\n",index,data[index]);
             data[index] = serialGetchar(fd);
             index++;
         } else {
@@ -28,7 +29,7 @@ int PN532_UART_ReadData(uint8_t* data, uint16_t count) {
     while (index < length) {
         if (serialDataAvail(fd)) {
             data[index] = serialGetchar(fd);
-            printf("data[%d] : %02x\n",index,data[index]);
+            //printf("data[%d] : %02x\n",index,data[index]);
             if (index == 3 && data[index] != 0) {
                 length = data[index] + 7;
             }
@@ -51,7 +52,6 @@ void PN532_UART_Init() {
     write(fd, data, sizeof(data));
     delay(50);
 } 
-
 
 /*
 =================================================================================
@@ -138,33 +138,45 @@ int PN532_ReadPassiveTarget(uint8_t* response, uint8_t card_baud, uint32_t timeo
 
 char * NFC_Reader(){
     uint8_t static uid[10];
-    int32_t uid_len = 0;
-    static char response[4];
+    static char response[16];
     PN532_UART_Init(); 
-    while(PN532_ReadPassiveTarget(uid, 0x00, 1000)==-1);
-    sprintf(response,"%x %x %x %x\n",uid[0],uid[1],uid[2],uid[3]);
-    return response;
+    if(PN532_ReadPassiveTarget(uid, 0x00, 1000)==-1)
+    {
+        // null
+    }
+    else
+    {
+        sprintf(response,"%x %x %x %x\n",uid[0], uid[1], uid[2], uid[3]);
+
+        // 측정 값
+        nfcID = response;
+    }
+    
+    return nfcID;
 }
 
 void *NFCReaderFun(void *arg)
 {
     while(1){ 
-        // share_var이 3이 될 때까지 대기
-        while(share_var != 3) {}
-
+        // share_var이 3이 될 때까지 대기 및 NFC 인식
+        while(share_var != 3) {
+            NFC_Reader();
+        }
 
         pthread_mutex_lock(&mutex); // 뮤텍스 잠금
 
         //printf("share_var : %d", share_var);
-        share_var = 0; // 나중에 3으로 바꿔야함
+        share_var = 0; // 나중에 4로 바꿔야함
 
         // ============== TODO : 측정 데이터 읽어오기 ============== //
 
         
-        printf("nfc : %s\n", NFC_Reader());
+        printf("nfc : %s\n", nfcID);
 
         pthread_mutex_unlock(&mutex); // 뮤텍스 잠금 해제
         sleep(2);
+
+        nfcID = "null";
 
         delay(500);
     }

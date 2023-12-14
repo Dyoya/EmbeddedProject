@@ -15,12 +15,6 @@ void *temperatureSensorFun(void *arg)
     int dht11_temp[5] = {0, 0, 0, 0, 0};
     int dht11_result[5] = {0, 0, 0, 0, 0};
 
-    if (wiringPiSetupGpio() == -1)
-    {
-        printf("gpio error");
-        return NULL;
-    }
-
     while (1)
     {
         // share_var이 0가 될 때까지 대기
@@ -53,6 +47,7 @@ void *temperatureSensorFun(void *arg)
                 {
                     counter++;
                     delayMicroseconds(1);
+                    //printf("%d")
                     if (counter == 255)
                         break;
                 }
@@ -103,7 +98,6 @@ void *temperatureSensorFun(void *arg)
 
         share_var = 1;
 
-        // ============== TODO : 측정 데이터 읽어오기 ============== //
         printf("temperature : %d.%d℃\n", dht11_result[2], dht11_result[3]);
 
         pthread_mutex_unlock(&mutex); // 뮤텍스 잠금 해제

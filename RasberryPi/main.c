@@ -24,6 +24,7 @@ int main()
 
     // 초기화
     share_var = 0;
+    
     if(wiringPiSetupGpio() < 0 ){
         printf("wiringPiSetup() is failed\n");
         return -1;
@@ -33,16 +34,15 @@ int main()
         return -1;
     }
 
-
     //테스트
-    share_var = 0;
+    //share_var = 0;
 
     temperature = pthread_create(&temperature, NULL, temperatureSensorFun, NULL);
     gas = pthread_create(&gas, NULL, gasSensorFun, NULL);
     water = pthread_create(&water, NULL, waterSensorFun, NULL);
     nfc = pthread_create(&nfc, NULL, NFCReaderFun, NULL);
 
-    if(water < 0)
+    if(temperature < 0 || water < 0 || gas < 0 || nfc < 0)
     {
         perror("pthread_create() error\n");
         exit(0);

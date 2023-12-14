@@ -6,7 +6,6 @@
 #include "common.h"
 
 #define SLAVE_ADDR_01 0x48 // 슬레이브 주소
-static const char* I2C_DEV = "/dev/i2c-1"; // 장치 파일
 
 void *waterSensorFun(void *arg)
 {
@@ -28,7 +27,6 @@ void *waterSensorFun(void *arg)
 
         pthread_mutex_lock(&mutex); // 뮤텍스 잠금
 
-        //printf("share_var : %d", share_var);
         share_var = 3;
 
         // ============== TODO : 측정 데이터 읽어오기 curVal ============== //

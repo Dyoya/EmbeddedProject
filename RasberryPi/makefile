@@ -4,7 +4,7 @@
 CC = gcc
 
 # 컴파일 옵션 설정
-CFLAGS = -Wall -pthread -lwiringPi
+CFLAGS = -Wall -pthread -lwiringPi -lcurl
 
 # 빌드할 실행 파일 이름
 TARGET = myprogram
