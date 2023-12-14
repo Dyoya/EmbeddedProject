@@ -1,6 +1,6 @@
 package kr.ac.kumoh.ce.s20190348.AndroidAppProject
 
-import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.EditText
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -32,19 +33,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.os.postDelayed
 import coil.compose.AsyncImage
 import kr.ac.kumoh.ce.s20190348.AndroidAppProject.ui.theme.AndroidAppTheme
 
@@ -54,31 +52,29 @@ class MainActivity : ComponentActivity() {
 
     private val handler = Handler(Looper.getMainLooper())
 
+    // 등록된 NFC 리스트
+    private val registeredNfcList = mutableListOf<String>()
+
+    // 다이얼로그 관련 bool 변수
+    private var isNfcDialogShown = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 초기 데이터 가져오기
-        val initialSensorList = createRandomSensorList(1)
-        var sensorList by mutableStateOf(initialSensorList)
+        registeredNfcList.add("null")
 
         // Compose 화면 설정
         setContent {
-            MainScreen(sensorList)
+            MainScreen(viewModel)
         }
 
         // 2초마다 데이터 가져와서 업데이트
         handler.postDelayed(object : Runnable {
             override fun run() {
-                // 새로운 랜덤 데이터 생성
-                val newSensorList = createRandomSensorList(1)
-
                 viewModel.fetchData()
-                //checkSensorStatus(viewModel.sensorList.value)
-                checkSensorStatus(newSensorList)
-                Log.d("MainActivity", "checkSensorStatus called after fetching data")
+                checkSensorStatus(viewModel.sensorList.value)
 
-                // 상태 갱신
-                sensorList = newSensorList
+                Log.d("MainActivity", "checkSensorStatus called after fetching data")
 
                 // 반복 실행
                 handler.postDelayed(this, 2000)
@@ -102,17 +98,57 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun showNfcRegistrationDialog(activity: MainActivity, nfcName: String) {
+        if (isNfcDialogShown) {
+            return
+        }
+
+        // 선택 다이얼로그 사용 중
+        isNfcDialogShown = true
+
+        AlertDialog.Builder(activity)
+            .setTitle("NFC 등록")
+            .setMessage("새로운 NFC가 감지되었습니다. 등록하시겠습니까?")
+            .setPositiveButton("등록") { _, _ ->
+                Log.d("NFC", "$nfcName 등록")
+                registeredNfcList.add(nfcName)
+            }
+            .setNegativeButton("취소") { _, _ ->
+                // 작업 X
+            }
+            .setNeutralButton("경고!") { _, _ ->
+                Log.d("NFC", "$nfcName 경고!!")
+                viewModel.warning()
+            }
+            .setOnDismissListener {
+                // 선택 다이얼로그 사용 해제
+                isNfcDialogShown = false
+            }
+            .show()
+    }
+
     private fun checkSensorStatus(sensorList: List<Sensor>?) {
         sensorList?.let {
             val colorList = dangerColor(sensorList[0])
 
-            // Check for red color indicating danger
+            // 위험 신호 확인
             if (colorList.contains(Color(255, 0, 0, 100))) {
                 sendNotification("!!!차량 위험!!!", "차량에 위험 신호가 발견됨!")
+            }
+
+            // NFC 리스트에 없는 새로운 데이터가 들어왔을 때 푸시 알림 및 등록 다이얼로그 표시
+            if (!isNfcDataRegistered(sensorList[0].nfc) && !isNfcDialogShown) {
+                showNfcRegistrationDialog(this, sensorList[0].nfc)
             }
         }
     }
 
+    // NFC 등록 확인
+    private fun isNfcDataRegistered(newNfcData: String): Boolean {
+        return registeredNfcList.any { it == newNfcData }
+    }
+
+    // 경고 알림 보내기
     private fun sendNotification(title: String, message: String) {
         Log.d("MainActivity", "Sending notification - Title: $title, Message: $message")
 
@@ -135,21 +171,28 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-//fun MainScreen(viewModel: SensorViewModel) {
-fun MainScreen(sensorList: List<Sensor>) {
-    //val sensorList by viewModel.sensorList.observeAsState(emptyList())
+fun MainScreen(viewModel: SensorViewModel) {
+//fun MainScreen(sensorList: List<Sensor>) {
+    val sensorList by viewModel.sensorList.observeAsState(emptyList())
 
-    AndroidAppTheme {
-        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-            DisplaySensor(sensorList)
+    if (sensorList.isNotEmpty()) {
+        AndroidAppTheme {
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
+            ) {
+                DisplaySensor(sensorList)
+            }
         }
+    } else {
+        Text("Loading...")
     }
 }
 
 @Composable
 fun DisplaySensor(sensor: List<Sensor>)
 {
-    val colorList = dangerColor(sensor[0]) // 임시
+    val colorList = dangerColor(sensor[0])
 
     val tem =  sensor[0].temperature
     val water = sensor[0].water
@@ -185,7 +228,7 @@ fun DisplaySensor(sensor: List<Sensor>)
                 verticalArrangement = Arrangement.Center
             ){
                 TitleText("온도 센서")
-                DataText("${tem}")
+                DataText("${tem}℃")
             }
         }
 
@@ -336,6 +379,7 @@ fun dangerColor(sensor: Sensor): MutableList<Color> {
         colorList[2] = green
 
     // NFC
+    colorList[3] = Color(0, 0, 255, 50)
 
 
     return colorList
@@ -347,10 +391,10 @@ fun createRandomSensorList(size: Int): List<Sensor> {
     val sensorList = mutableListOf<Sensor>()
 
     repeat(size) {
-        val temperature = random.nextInt(100) // 임의의 온도 데이터 (0부터 99까지의 난수)
+        val temperature = random.nextFloat() * 100 // 임의의 온도 데이터 (0부터 99까지의 난수)
         val water = random.nextInt(1000) // 임의의 수위 데이터 (0부터 999까지의 난수)
         val gas = random.nextInt(100) // 임의의 가스 데이터 (0부터 99까지의 난수)
-        val nfc = "NFC_${random.nextInt(100)}" // 임의의 NFC 데이터 ("NFC_0"부터 "NFC_99"까지의 문자열)
+        val nfc = "NFC_${random.nextInt(10)}" // 임의의 NFC 데이터 ("NFC_0"부터 "NFC_99"까지의 문자열)
 
         val sensor = Sensor(temperature, water, gas, nfc)
         sensorList.add(sensor)
