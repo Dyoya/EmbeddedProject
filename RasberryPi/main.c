@@ -32,13 +32,6 @@ int main()
         printf("wiringPi2CSetup Failed: \n"); 
         return -1;
     }
-    if ((uart_fd = serialOpen("/dev/ttyS0", 115200)) < 0) {
-        printf ("Unable to open serial device.\n") ;
-        return ;
-    }
-    uint8_t data[] = {0x55, 0x55, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x03, 0xFD, 0xD4, 0x14, 0x01, 0x17, 0x00};
-    write(fd, data, sizeof(data));
-    delay(50);
 
 
     //테스트
