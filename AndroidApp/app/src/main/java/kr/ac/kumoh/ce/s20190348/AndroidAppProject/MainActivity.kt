@@ -359,21 +359,21 @@ fun dangerColor(sensor: Sensor): MutableList<Color> {
         colorList[0] = green
 
     // 수위 센서
-    if(sensor.water > 700)
+    if(sensor.water > 100)
         colorList[1] = danger
-    else if(sensor.water > 500)
+    else if(sensor.water > 60)
         colorList[1] = red
-    else if (sensor.water > 300)
+    else if (sensor.water > 30)
         colorList[1] = yellow
     else
         colorList[1] = green
 
     // 가스 센서
-    if(sensor.temperature > 50)
+    if(sensor.gas > 250)
         colorList[2] = danger
-    else if(sensor.temperature > 30)
+    else if(sensor.gas > 200)
         colorList[2] = red
-    else if (sensor.temperature > 10)
+    else if (sensor.gas > 150)
         colorList[2] = yellow
     else
         colorList[2] = green

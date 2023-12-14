@@ -4,13 +4,13 @@
 CC = gcc
 
 # 컴파일 옵션 설정
-CFLAGS = -Wall -pthread -lwiringPi -lcurl
+CFLAGS = -Wall -pthread -lwiringPi -lcurl -ljson-c
 
 # 빌드할 실행 파일 이름
 TARGET = myprogram
 
 # 소스 파일 목록
-SRCS = main.c common.c water.c temperature.c gas.c nfc.c
+SRCS = main.c common.c water.c temperature.c gas.c nfc.c buzzer.c
 
 # 헤더 파일 목록
 HDRS = common.h

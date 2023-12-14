@@ -27,15 +27,19 @@ void *waterSensorFun(void *arg)
 
         pthread_mutex_lock(&mutex); // 뮤텍스 잠금
 
-        share_var = 3;
-
         // ============== TODO : 측정 데이터 읽어오기 curVal ============== //
         printf("water : %d\n", curVal);
+
+        waterValue = curVal;
+
+        delay(200);
+
+        share_var = 3;
 
         pthread_mutex_unlock(&mutex); // 뮤텍스 잠금 해제
         sleep(2);
 
-        delay(500);
+        
     }
 
     return NULL;
