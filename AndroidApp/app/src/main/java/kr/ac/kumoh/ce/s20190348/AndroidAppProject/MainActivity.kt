@@ -57,22 +57,35 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 임시 데이터
-        val randomSensorList = createRandomSensorList(1)
+        // 초기 데이터 가져오기
+        val initialSensorList = createRandomSensorList(1)
+        var sensorList by mutableStateOf(initialSensorList)
 
-        createNotificationChannel()
-
+        // Compose 화면 설정
         setContent {
-            MainScreen(randomSensorList)
+            MainScreen(sensorList)
         }
 
         // 2초마다 데이터 가져와서 업데이트
-        handler.postDelayed(2000) {
-            viewModel.fetchData()
-            //checkSensorStatus(viewModel.sensorList.value)
-            checkSensorStatus(randomSensorList)
-            Log.d("MainActivity", "checkSensorStatus called after fetching data")
-        }
+        handler.postDelayed(object : Runnable {
+            override fun run() {
+                // 새로운 랜덤 데이터 생성
+                val newSensorList = createRandomSensorList(1)
+
+                viewModel.fetchData()
+                //checkSensorStatus(viewModel.sensorList.value)
+                checkSensorStatus(newSensorList)
+                Log.d("MainActivity", "checkSensorStatus called after fetching data")
+
+                // 상태 갱신
+                sensorList = newSensorList
+
+                // 반복 실행
+                handler.postDelayed(this, 2000)
+            }
+        }, 2000)
+
+        createNotificationChannel()
     }
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -109,6 +122,7 @@ class MainActivity : ComponentActivity() {
                 .setContentTitle(title)
                 .setContentText(message)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true)
 
             with(NotificationManagerCompat.from(this)) {
@@ -156,7 +170,7 @@ fun DisplaySensor(sensor: List<Sensor>)
             verticalAlignment = Alignment.CenterVertically
         ){
             AsyncImage(
-                model = "https://picsum.photos/300/300?random=$1",
+                model = R.drawable.image_temperature,
                 contentDescription = "온도 이미지",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -186,7 +200,7 @@ fun DisplaySensor(sensor: List<Sensor>)
             verticalAlignment = Alignment.CenterVertically
         ){
             AsyncImage(
-                model = "https://picsum.photos/300/300?random=$2",
+                model = R.drawable.image_water,
                 contentDescription = "수위 이미지",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -216,7 +230,7 @@ fun DisplaySensor(sensor: List<Sensor>)
             verticalAlignment = Alignment.CenterVertically
         ){
             AsyncImage(
-                model = "https://picsum.photos/300/300?random=$3",
+                model = R.drawable.image_gas,
                 contentDescription = "가스 이미지",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -246,7 +260,7 @@ fun DisplaySensor(sensor: List<Sensor>)
             verticalAlignment = Alignment.CenterVertically
         ){
             AsyncImage(
-                model = "https://picsum.photos/300/300?random=$4",
+                model = R.drawable.image_nfc,
                 contentDescription = "NFC 이미지",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -327,6 +341,7 @@ fun dangerColor(sensor: Sensor): MutableList<Color> {
     return colorList
 }
 
+// 임시 데이터 생성 함수
 fun createRandomSensorList(size: Int): List<Sensor> {
     val random = java.util.Random()
     val sensorList = mutableListOf<Sensor>()
