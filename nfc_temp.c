@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdint.h>
 #include <unistd.h>
 #include <wiringPi.h>
@@ -11,7 +12,7 @@ int PN532_UART_ReadData(uint8_t* data, uint16_t count) {
     int length = count;
     while (index < 4) {
         if (serialDataAvail(fd)) {
-            printf("data[%d] : %02x\n",index,data[index]);
+            // printf("data[%d] : %02x\n",index,data[index]);
             data[index] = serialGetchar(fd);
             index++;
         } else {
@@ -21,11 +22,10 @@ int PN532_UART_ReadData(uint8_t* data, uint16_t count) {
     if (data[3] != 0) {
         length = data[3] + 7;
     }
-    // printf("length : %d\n",length);
     while (index < length) {
         if (serialDataAvail(fd)) {
             data[index] = serialGetchar(fd);
-            printf("data[%d] : %02x\n",index,data[index]);
+            // printf("data[%d] : %02x\n",index,data[index]);
             if (index == 3 && data[index] != 0) {
                 length = data[index] + 7;
             }
@@ -132,23 +132,18 @@ int PN532_ReadPassiveTarget(uint8_t* response, uint8_t card_baud, uint32_t timeo
     return buff[5];
 }
 
-int main() {
-    uint8_t uid[10];
+char * NFC_Reader(){
+    uint8_t static uid[10];
     int32_t uid_len = 0;
-    printf("Hello!\r\n");
+    static char response[4];
     PN532_UART_Init(); 
-    printf("Waiting for RFID/NFC card...\r\n");
-    while (1)
-    {
-        // Check if a card is available to read
-        uid_len = PN532_ReadPassiveTarget(uid, 0x00, 1000);
-        if (uid_len != -1) {
-            printf("Found card with UID: ");
-            for (uint8_t i = 0; i < uid_len; i++) {
-                printf("%02x ", uid[i]);
-            }
-            printf("\r\n");
-            break;
-        }
-    }
+    while(PN532_ReadPassiveTarget(uid, 0x00, 1000)==-1);
+    sprintf(response,"%x %x %x %x\n",uid[0],uid[1],uid[2],uid[3]);
+    return response;
+}
+
+int main() {
+    // NFC_Reader();
+    printf("nfc : %s",NFC_Reader());
+    return 0;
 }
