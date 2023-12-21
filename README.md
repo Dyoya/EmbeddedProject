@@ -186,11 +186,27 @@ app.get("/warning", (req, res) => {
   ```
 
 ### 서버 환경
-  **1. node.js 설치**  
+  **1. DB 배포**
+     [[MariaDB] MariaDB 클라우드타입에 배포하고 sequelize와 연결하기](https://velog.io/@dngur9801/MariaDB-MariaDB-%ED%81%B4%EB%9D%BC%EC%9A%B0%EB%93%9C%ED%83%80%EC%9E%85%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B3%A0-sequelize%EC%99%80-%EC%97%B0%EA%B2%B0%ED%95%98%EA%B8%B0)
+     
+  - [mysql.sql](./Server/mysql.sql)의 내용을 바탕으로 DB구성
+  
+  **2. node.js 설치**  
      [Node.js 홈페이지](https://nodejs.org/en/download)
      
-  **2. 서버 실행**
-     
+  **3. 서버 실행**
+  - [server.js](./Server/server.js)의 내용 수정
+  -  **host**, **port**, **password**를 수정
+  ```javascript
+const db = mysql.createConnection({
+  host: "svc.sel4.cloudtype.app",
+  port: 30640,
+  user: "root",
+  password: "mysql1234",
+  database: "sensor",
+});
+```
+  - 서버 실행
   ```
   cd Server node && server.js
   ```
