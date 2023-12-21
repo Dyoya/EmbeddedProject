@@ -25,4 +25,6 @@ extern void *waterSensorFun(void *); // 수위 센서 쓰레드 함수
 extern void *NFCReaderFun(void *); // NFC 리더기 쓰레드 함수
 extern void *dataToServer(void *); // 서버로 데이터 전송하는 함수
 
+extern void *waring(void *); // 부저 사용 함수
+
 #endif
