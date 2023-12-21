@@ -70,7 +70,43 @@
  헤더 파일 **common.h**를 만들어 여러 코드를 하나로 합쳤다. common.h는 공유 변수 및 함수가 선언되어 있고, common.c에는 정의되어 있다. 
  
 - **temperature.c**  
- 온습도 센서를 사용하는 temperatureSensorFun(void*) 함수가 있는 코드다. 
+ 온습도 센서를 사용하는 temperatureSensorFun(void*) 쓰레드 함수가 있는 코드다. 온습도 센서 온도와 습도를 측정할 수 있으며, 데이터는 배열 형태로 받아온다. dht11_val[0]과 dht11_val[1]은 차례대로 습도의 정수 부분과 소수 부분이며, dht11_val[2]와 dht11_val[3]은 온도의 정수 부분과 소수 부분이다. 습도 측정은 사용하지 않으므로 dht11_val[2]와 dht11_val[3]을 sprintf() 함수를 통해 '%d.%d' 형태의 문자열로 만들고, strtof() 함수를 통해 다시 소수 형태로 변환하여 전송했다.
+
+- **water.c**  
+  수위 센서를 사용하는 waterSensorFun(void*) 쓰레드 함수가 있는 코드다. 수위 센서는 아날로그 신호로 출력하므로 디지털 신호로 변환하기 위한 ADC 컨버터가 필요하다. 컨버터의 AOUT2에 연결을 하므로 adcChannel를 2로 설정하였다. wiringPiI2CWrite() 함수를 통해 값을 읽게 되는데, 처음엔 이전 값을 읽고 두 번째는 현재 값을 읽게 된다. 그래서, 값을 전송하기 전에 wiringPiI2CWrite()를 2번 사용하고 해당 값을 전송한다.
+
+- **gas.c**  
+ 가스 센서를 사용하는 gasSensorFun(void*) 쓰레드 함수가 있는 코드다. 가스 센서는 아날로그 신호와 디지털 신호 둘 다 출력할 수 있다. 디지털 신호는 가스 센서가 가스를 감지했으면 1, 아니면 0을 출력하기 때문에 아날로그 신호를 ADC 컨버터를 사용해 라즈베리 파이의 핀에 연결했다. 수위 센서와 같이 wiringPiI2CWrite() 함수를 두 번 사용해 두 번째 읽은 값을 전송한다.
+
+- **nfc.c**  
+ nfc 리더기에 대한 NFCReaderFun(void*) 쓰레드 함수가 있는 코드다. nfc에 대한 코드는 오픈소스를 많이 사용했다. [PN532 NFC Library](https://github.com/soonuse/pn532-lib) 해당 오픈소스의 코드를 사용해 UART 통신 방식으로 값을 읽어오고, 문자열 형태로 값을 전송한다.
+
+- **buzzer.c**
+ 서버에서 경고 신호가 발생했을 경우, 부저를 울리는 쓰레드 함수가 있는 코드다. 다른 쓰레드와는 별개로 mutex를 사용하지 않고 작동되는 쓰레드며, 경고 신호가 발생한 경우 부저를 울리게 된다.
+
+- **main.c**  
+  모든 센서는 쓰레드로 동작한다. mutex를 사용해 모든 쓰레드에게서 차례대로 값을 받아오고, 해당 데이터를 JSON 형태로 만들어 Curl을 사용해 DB로 전송한다.
+
+- **makefile**  
+  소스 코드 파일을 모두 분리하였기 때문에 makefile을 만들었다. 컴파일러를 설정하고, 옵션과 소스 파일, 헤더 파일 목록을 입력하고, 오브젝트 파일 및 빌드 규칙은 매크로를 사용했다. 아래 코드는 makefile의 일부다. 
+
+```
+# 오브젝트 파일 목록
+OBJS = $(SRCS:.c=.o)
+
+# 빌드 규칙
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CC) $(OBJS) -o $(TARGET) $(CFLAGS)
+
+%.o: %.c $(HDRS)
+	$(CC) -c $< -o $@ $(CFLAGS)
+
+clean:
+	rm -f $(OBJS) $(TARGET)
+```
+
 
 ## 2. Server
  데이터베이스의 4가지 센서값을 받아들일 수 있게 temperature, water, gas, nfc의 속성으로 구성했다.
@@ -238,7 +274,7 @@ NFC를 제외한 나머지 센서들의 경우 특이사항(비정상적으로 �
 ![개발 일정](./img/개발일정2.jpg.png)
 
 # 데모 영상
-[센서 테스트 데모](https://youtu.be/WD6pnmGQc7k)
+[센서 테스트 데모](https://youtu.be/WD6pnmGQc7k)  
 [푸시 알림 데모](https://youtube.com/shorts/I-0o1dvdy5E?feature=share)
 
 
