@@ -132,35 +132,6 @@ app.get("/warning", (req, res) => {
 
 # 실행 방법
  ### 라즈베리파이 환경
-     1. wiringPi 설치
-     ```
-     git clone https://github.com/WiringPi/WiringPi.git
-     cd WiringPi
-     git pull origin
-     ./bulid
-     ```
-     설치가 성공적인지 확인합니다
-     ```
-     gpio -v
-     ```
-      2. curl 설치
-     ```
-     sudo apt update
-     sudo apt install -y curl
-     ```
-     
-     설치가 끝났다면 버전을 확인합니다.
-     ```
-     curl --version
-     ```
-      3. 실행 파일 빌드
-     ```
-     cd RaspberryPi && make
-     ```
-     파일 실행
-     ```
-     ./myprogram
-     ```
 
 
 # 사용법
