@@ -161,7 +161,6 @@ app.get("/warning", (req, res) => {
   ```
   gpio -v
   ```
-<br>
    2. curl 설치
   ```
   sudo apt update
@@ -171,7 +170,6 @@ app.get("/warning", (req, res) => {
   ```
   curl --version
   ```
-<br>
   3. 실행 파일 빌드
   ```
   cd RaspberryPi && make
@@ -180,11 +178,10 @@ app.get("/warning", (req, res) => {
   ```
   ./myprogram
   ```
-<br>
+
 ### 서버 환경
   1. node.js 설치
      [Node.js 홈페이지](https://nodejs.org/en/download) 
-<br>
   2. 서버 실행
   ```
   cd Server node && server.js
