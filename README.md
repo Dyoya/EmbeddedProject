@@ -5,10 +5,10 @@
 
 |프로필|학번|역할|
 |:---:|:---:|:---|
-|<a href="https://github.com/Dyoya/"><img src="https://avatars.githubusercontent.com/u/118094189?v=4" width="100px;" alt="Dyoya"/><br /><sub><b>Dyoya (김형민)</b></sub></a><br /> <a href="https://github.com/Dyoya/EmbeddedProject/commits?author=Dyoya" title="Commit Log">💻</a>|20190348|- 역할<br>- 역할|
-|<a href="https://github.com/ParkSGye/"><img src="https://avatars.githubusercontent.com/u/113571828?v=4" width="100px;" alt="ParkSGye"/><br /><sub><b>ParkSGye (박성규)</b></sub></a><br /> <a href="https://github.com/Dyoya/EmbeddedProject/commits?author=ParkSGye" title="Commit Log">💻</a>|20190452|- 역할<br>- 역할|
-|<a href="https://github.com/user71309876/"><img src="https://avatars.githubusercontent.com/u/93814905?v=4" width="100px;" alt="user71309876"/><br /><sub><b>user71309876 (박재현)</b></sub></a><br /> <a href="https://github.com/Dyoya/EmbeddedProject/commits?author=user71309876" title="Commit Log">💻</a>|20180474|- 역할<br>- 역할|
-|<a href="https://github.com/dwgns/"><img src="https://avatars.githubusercontent.com/u/67849875?v=4" width="100px;" alt="dwgns"/><br /><sub><b>dwgns (안지훈)</b></sub></a><br /> <a href="https://github.com/Dyoya/EmbeddedProject/commits?author=dwgns" title="Commit Log">💻</a>|20190685|- 역할<br>- 역할|
+|<a href="https://github.com/Dyoya/"><img src="https://avatars.githubusercontent.com/u/118094189?v=4" width="100px;" alt="Dyoya"/><br /><sub><b>Dyoya (김형민)</b></sub></a><br /> <a href="https://github.com/Dyoya/EmbeddedProject/commits?author=Dyoya" title="Commit Log">💻</a>|**20190348**|- 수위 센서 코드 제작<br>- 안드로이드 앱 제작<br>- 코드 종합 및 메이크파일 제작<br>- 리드미 종합 및 정리<br>- 중간 발표|
+|<a href="https://github.com/ParkSGye/"><img src="https://avatars.githubusercontent.com/u/113571828?v=4" width="100px;" alt="ParkSGye"/><br /><sub><b>ParkSGye (박성규)</b></sub></a><br /> <a href="https://github.com/Dyoya/EmbeddedProject/commits?author=ParkSGye" title="Commit Log">💻</a>|**20190452**|- 수위 센서 코드 제작<br>- 온습도 센서 코드 제작<br>- 부저 사용 코드 제작|
+|<a href="https://github.com/user71309876/"><img src="https://avatars.githubusercontent.com/u/93814905?v=4" width="100px;" alt="user71309876"/><br /><sub><b>user71309876 (박재현)</b></sub></a><br /> <a href="https://github.com/Dyoya/EmbeddedProject/commits?author=user71309876" title="Commit Log">💻</a>|**20180474**|- NFC 코드 제작<br>- Curl 라이브러리 사용<br>- DB 및 서버 제작<br>- 최종 발표|
+|<a href="https://github.com/dwgns/"><img src="https://avatars.githubusercontent.com/u/67849875?v=4" width="100px;" alt="dwgns"/><br /><sub><b>dwgns (안지훈)</b></sub></a><br /> <a href="https://github.com/Dyoya/EmbeddedProject/commits?author=dwgns" title="Commit Log">💻</a>|**20190685**|- NFC 코드 제작<br>- 가스 센서 코드 제작<br>- 최종 발표 자료 제작|
 
 # List
 1. [아이디어 소개](https://github.com/Dyoya/EmbeddedProject#아이디어-소개)
@@ -143,10 +143,10 @@ app.get("/warning", (req, res) => {
 
 
 ## 3. Android App
- 내용내용
- 
-## 4. Makefile
- 내용내용
+  안드로이드 앱은 서버로부터 데이터를 받아와 화면에 출력하며, 계속 갱신되어야 한다. 먼저, 화면에 어떻게 보여줄지 디자인했다. 4개의 영역을 만들어 측정값에 따라 해당 영역의 배경 색이 변하도록 했다. 센서의 측정 값이 경고 수준이 되면, 앱이 푸시 알림을 발생하도록 했다. NFC 리스트를 만들어 해당 리스트에 없는 NFC 태그가 인식되었을 경우엔 팝업을 띄우도록 했다. 팝업에는 등록, 취소, 경고 버튼이 있다. 경고 버튼을 누를 경우엔 서버에 경고 신호가 전송되도록 했으며, 등록 버튼을 누르면 리스트에 해당 NFC의 태그가 등록된다. 취소 버튼을 누를 경우엔 아무 것도 작동하지 않는다. 위 기능은 [MainActivity.kt](https://github.com/Dyoya/EmbeddedProject/blob/main/AndroidApp/app/src/main/java/kr/ac/kumoh/ce/s20190348/AndroidAppProject/MainActivity.kt)에서 확인할 수 있다.  
+  SensorViewModel.kt가 서버에서 데이터를 받아오는 역할을 한다. 
+
+
 
 # 실행 방법
  ### 라즈베리파이 환경
