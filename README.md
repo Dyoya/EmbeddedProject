@@ -189,6 +189,7 @@ app.get("/warning", (req, res) => {
 NFC를 제외한 나머지 센서들의 경우 특이사항(비정상적으로 높은 온도 등) 발생 시 스마트폰 어플리케이션 화면에서 각 항목에 대해 빨간색으로 강조 처리되고 백그라운드 경고 알림을 발생시킨다.
 
 아래는 스마트폰 어플리케이션 사용 예시이다.
+
 ![image](https://github.com/Dyoya/EmbeddedProject/assets/67849875/c53da1c3-f104-476a-814d-b17b7d85913b)
 
 
