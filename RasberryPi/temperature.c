@@ -48,7 +48,6 @@ void *temperatureSensorFun(void *arg)
                 {
                     counter++;
                     delayMicroseconds(1);
-                    //printf("%d")
                     if (counter == 255)
                         break;
                 }
@@ -70,16 +69,12 @@ void *temperatureSensorFun(void *arg)
 
         if (dht11_val[0] == 0)
         {
-            //printf("if\n");
-            //printf("Humidity = %d.%d %% Temperature = %d.%d *C\n", dht11_temp[0], dht11_temp[1], dht11_temp[2], dht11_temp[3]);
             for (i = 0; i < 5; i++)
                 dht11_result[i] = dht11_temp[i];
         }
         else if ((j >= 40) && (dht11_val[4] == ((dht11_val[0] + dht11_val[1] + dht11_val[2] + dht11_val[3]) & 0xFF)))
         {
-            //printf("else if\n");
-            //printf("Humidity = %d.%d %% Temperature = %d.%d *C (%.1f *F)\n", dht11_val[0], dht11_val[1], dht11_val[2], dht11_val[3]);
-            for (i = 0; i < 5; i++)
+             for (i = 0; i < 5; i++)
             {
                 dht11_result[i] = dht11_val[i];
                 dht11_temp[i] = dht11_val[i];
@@ -87,14 +82,13 @@ void *temperatureSensorFun(void *arg)
         }
         else
         {
-            //printf("else\n");
-            //printf("Humidity = %d.%d %% Temperature = %d.%d *C\n", dht11_temp[0], dht11_temp[1], dht11_temp[2], dht11_temp[3]);
             for (i = 0; i < 5; i++)
             {
                 dht11_result[i] = dht11_temp[i];
             }
         }
 
+        // ============== 측정 데이터 읽어오기 ============== //
         pthread_mutex_lock(&mutex); // 뮤텍스 잠금
 
         printf("temperature : %d.%d\n", dht11_result[2], dht11_result[3]);
@@ -105,8 +99,6 @@ void *temperatureSensorFun(void *arg)
         char *endptr;
         float t;
         temValue = strtof(temp, &endptr);
-
-        //temValue = (float)(round(t) / 10);
 
         delay(100);
 

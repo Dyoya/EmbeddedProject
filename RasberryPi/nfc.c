@@ -12,8 +12,6 @@
 
 #include "wiringPi.h"
 #include "wiringSerial.h"
-// #include "pn532_rpi.h"
-// #include "pn532.h"
 
 #define _RESET_PIN (20)
 #define _REQ_PIN (16)
@@ -375,11 +373,6 @@ void *NFCReaderFun(void *arg)
     while(1){ 
         // share_var이 3이 될 때까지 대기 및 NFC 인식
         while(share_var != 3) {
-            // char* temp = NFC_Reader();
-            // printf("::::%s\n",temp);
-            // if(!strcmp(temp, "error")){
-            //     nfcId = temp;
-            // }
         }
 
         pthread_mutex_lock(&mutex); // 뮤텍스 잠금
@@ -397,14 +390,12 @@ void *NFCReaderFun(void *arg)
 
         share_var = 4;
 
-        // ============== TODO : 측정 데이터 읽어오기 ============== //
+        // ============== 측정 데이터 읽어오기 ============== //
 
         printf("nfc : %s", nfcId);
 
         pthread_mutex_unlock(&mutex); // 뮤텍스 잠금 해제
         sleep(2);
-
-        //nfcId = "null";
 
         delay(500);
     }

@@ -40,9 +40,6 @@ int main()
         return -1;
     }
 
-    // 테스트
-    // share_var = 0;
-
     temperature = pthread_create(&temperature, NULL, temperatureSensorFun, NULL);
     gas = pthread_create(&gas, NULL, gasSensorFun, NULL);
     water = pthread_create(&water, NULL, waterSensorFun, NULL);
@@ -57,8 +54,7 @@ int main()
         exit(0);
     }
 
-    while (1)
-        ;
+    while (1);
 }
 
 void *dataToServer(void *arg)
@@ -76,28 +72,12 @@ void *dataToServer(void *arg)
             // share_var이 4가 될 때까지 대기
         }
 
-        // JSON 객체 생성
-        struct json_object *json_obj = json_object_new_object();
-        json_object_object_add(json_obj, "temperature", json_object_new_double(temValue));
-        json_object_object_add(json_obj, "gas", json_object_new_int(gasValue));
-        json_object_object_add(json_obj, "water", json_object_new_int(waterValue));
-        json_object_object_add(json_obj, "nfc", json_object_new_string(nfcId));
-
-        // 문자열 변환
-        const char *json_str = json_object_to_json_string_ext(json_obj, JSON_C_TO_STRING_SPACED | JSON_C_TO_STRING_PRETTY);
-
         pthread_mutex_lock(&mutex); // 뮤텍스 잠금
 
-         // TODO : 측정 데이터 전송
-        printf(json_str);
-        printf("\n");
+         // 측정 데이터 전송
         char temp[200];
-        char json[100];
-        // sprintf(json, "\"temperature\":%f, ")
-        sprintf(temp, "curl -d \'{\"temperature\":%f,\"water\":%d,\"gas\":%d,\"nfc\":\"%s\"}\' -H \"Content-Type: application/json\" -X POST https://port-0-embedded-system-1gksli2alppq2t18.sel4.cloudtype.app/sensor", temValue,waterValue,gasValue,nfcId);
 
-        // printf(temp);
-        // printf("\n%s",temp);
+        sprintf(temp, "curl -d \'{\"temperature\":%f,\"water\":%d,\"gas\":%d,\"nfc\":\"%s\"}\' -H \"Content-Type: application/json\" -X POST https://port-0-embedded-system-1gksli2alppq2t18.sel4.cloudtype.app/sensor", temValue,waterValue,gasValue,nfcId);
 
         system(temp);
 

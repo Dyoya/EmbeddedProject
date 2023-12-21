@@ -22,12 +22,12 @@ void *gasSensorFun(void *arg)
         
         // 가스 센서 read
         // 주의: read 된 값은 단순 전압으로 농도가 아님
-        gas_data = wiringPiI2CRead(fd); // 전역변수 gas_data 로 전달함, write가 이 스레드에서만 수행되므로 충돌은 없을듯
+        gas_data = wiringPiI2CRead(fd); // 전역변수 gas_data 로 전달함, write가 이 스레드에서만 수행되므로 충돌은 없을 듯
         gas_data = wiringPiI2CRead(fd);
         
         pthread_mutex_lock(&mutex); // 뮤텍스 잠금
 
-        // ============== TODO : 측정 데이터 읽어오기 ============== //
+        // ============== 측정 데이터 읽어오기 ============== //
         printf("gas : %d\n", gas_data);
 
         gasValue = gas_data;
