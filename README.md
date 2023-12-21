@@ -11,16 +11,17 @@
 |<a href="https://github.com/dwgns/"><img src="https://avatars.githubusercontent.com/u/67849875?v=4" width="100px;" alt="dwgns"/><br /><sub><b>dwgns (안지훈)</b></sub></a><br /> <a href="https://github.com/Dyoya/EmbeddedProject/commits?author=dwgns" title="Commit Log">💻</a>|**20190685**|- NFC 코드 제작<br>- 가스 센서 코드 제작<br>- 최종 발표 자료 제작|
 
 # List
-1. [아이디어 소개](https://github.com/Dyoya/EmbeddedProject#아이디어-소개)
-2. [전체 시스템 구조](https://github.com/Dyoya/EmbeddedProject#전체-시스템-구조)
-3. [회로 구조도](https://github.com/Dyoya/EmbeddedProject#회로-구조도)
-5. [제한 조건](https://github.com/Dyoya/EmbeddedProject#제한-조건)
-6. [가산점 요소](https://github.com/Dyoya/EmbeddedProject#가산점-요소)
-7. [구현 내용](https://github.com/Dyoya/EmbeddedProject#구현-내용)
-8. [실행 방법](https://github.com/Dyoya/EmbeddedProject#실행-방법)
-9. [사용법](https://github.com/Dyoya/EmbeddedProject#사용법)
-10. [개발 일정](https://github.com/Dyoya/EmbeddedProject#개발-일정)
-11. [참고문헌](https://github.com/Dyoya/EmbeddedProject#참고문헌)
+1. [아이디어 소개](https://github.com/Dyoya/EmbeddedProject?tab=readme-ov-file#아이디어-소개)
+2. [전체 시스템 구조](https://github.com/Dyoya/EmbeddedProject?tab=readme-ov-file#전체-시스템-구조)
+3. [회로 구조도](https://github.com/Dyoya/EmbeddedProject?tab=readme-ov-file#회로-구조도)
+5. [제한 조건](https://github.com/Dyoya/EmbeddedProject?tab=readme-ov-file#제한-조건)
+6. [가산점 요소](https://github.com/Dyoya/EmbeddedProject?tab=readme-ov-file#가산점-요소)
+7. [구현 내용](https://github.com/Dyoya/EmbeddedProject?tab=readme-ov-file#구현-내용)
+8. [실행 방법](https://github.com/Dyoya/EmbeddedProject?tab=readme-ov-file#실행-방법)
+9. [사용법](https://github.com/Dyoya/EmbeddedProject?tab=readme-ov-file#사용법)
+10. [개발 일정](https://github.com/Dyoya/EmbeddedProject?tab=readme-ov-file#개발-일정)
+11. [데모 영상](https://github.com/Dyoya/EmbeddedProject?tab=readme-ov-file#데모-영상)
+12. [참고문헌](https://github.com/Dyoya/EmbeddedProject?tab=readme-ov-file#참고문헌)
 
 # 아이디어 소개
  **간이 자동차 프로젝트**는 차량의 여러 상황변화(ex.온도, 차량내부 수위, 가스 농도, NFC read)를 감지하여 확보한 데이터를 사용자의 스마트폰 어플에 송신하는 프로그램이다. 데이터에서 과도한 변화가 생길 경우 프로그램은 사용자의 스마트폰에 알람을 발생시키며, NFC 리더기에 타 사용자의 카드키(혹은 리더기에 처음 등록하는 카드키)에 대해 차량 내부 부저로 경고를 울리며 사용자의 스마트폰에 경고 신호를 보낸다.
