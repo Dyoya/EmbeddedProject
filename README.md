@@ -37,10 +37,28 @@
 
 # 제한 조건
 ## Thread
- 내용내용
+4가지 센서를 축정하는 함수와 측정된 센서값을 서버로 전달하는 함수를 구현하였다. 그리고 스레드를 이용하여 병렬적으로 값을 측정하고 서버에 전달하도록 하였다.
+```c
+    //main.c
+    temperature = pthread_create(&temperature, NULL, temperatureSensorFun, NULL);
+    gas = pthread_create(&gas, NULL, gasSensorFun, NULL);
+    water = pthread_create(&water, NULL, waterSensorFun, NULL);
+    nfc = pthread_create(&nfc, NULL, NFCReaderFun, NULL);
+    send = pthread_create(&send, NULL, dataToServer, NULL);
+```
+
 
 ## Mutex
- 내용내용
+각 센서마다 공유전역변수를 사용하여 각 센서 측정 함수가 측정값을 변수에 갱신하도록 한다.
+```c
+        //gas.c
+        pthread_mutex_lock(&mutex); // 뮤텍스 잠금
+        printf("gas : %d\n", gas_data);
+        gasValue = gas_data;
+        delay(100);
+        share_var = 2;
+        pthread_mutex_unlock(&mutex); // 뮤텍스 잠금 해제
+```
 
 # 가산점 요소
 > 서버를 통한 라즈베리 파이와 스마트폰 통신
